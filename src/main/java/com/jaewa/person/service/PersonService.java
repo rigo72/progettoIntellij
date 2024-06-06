@@ -21,35 +21,30 @@ public class PersonService {
         this.personRepository = personRepository;
     }
 
-    public List<Person> getAllPerson(){
+    public List<Person> getAllPerson() {
         return personRepository.findAll();
     }
 
-    public Person createPerson(Person person){
+    public Person createPerson(Person person) {
         return personRepository.save(person);
     }
 
-    public void deletePerson(Long  id){
+    public void deletePerson(Long id) {
         personRepository.deleteById(id);
     }
 
-    public Optional<Person> getPersonById(Long id){
+    public Optional<Person> getPersonById(Long id) {
         return personRepository.findById(id);
     }
 
-    public ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody Person personaDetails) {
-        Optional<Person> existingPerson = personService.getPersonById(id);
-        if(existingPerson.isPresent()) {
-            Person personToUpdate = existingPerson.get();
-            personToUpdate.setFirstName(personaDetails.getFirstName());
-            personToUpdate.setLastName(personaDetails.getLastName());
-            personToUpdate.setEmail(personaDetails.getEmail());
-            Person updatedPerson = personService.createPerson(personToUpdate);
-            return ResponseEntity.ok(updatedPerson);
-        }else {
-            return ResponseEntity.notFound().build();
+    public Optional<Person> updatePerson(Long id, Person personDetails) {
+        return personRepository.findById(id).map(person -> {
+            person.setFirstName(personDetails.getFirstName());
+            person.setLastName(personDetails.getLastName());
+            person.setEmail(personDetails.getEmail());
+            person.setPassword(personDetails.getPassword());
+            return personRepository.save(person);
+            });
         }
+    }
 
-
-
-}
