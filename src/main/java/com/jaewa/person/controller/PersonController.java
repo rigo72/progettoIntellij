@@ -27,8 +27,8 @@ public class PersonController {
 
 
     @GetMapping
-    public List<Person> getAllPersons() {
-        return personService.getAllPerson();
+    public List<PersonDto> getAllPersons() {
+        return personMapper.toDtos(personService.getAllPerson());
     }
 
     @GetMapping("/{id}")
