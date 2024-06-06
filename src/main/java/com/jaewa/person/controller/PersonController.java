@@ -1,6 +1,8 @@
 package com.jaewa.person.controller;
 
 
+import com.jaewa.person.controller.dto.PersonDto;
+import com.jaewa.person.controller.mapper.PersonMapper;
 import com.jaewa.person.model.Person;
 import com.jaewa.person.service.PersonService;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +15,11 @@ import java.util.Optional;
 @RequestMapping("/person")
 public class PersonController {
 
-    public PersonController(PersonService personService) {
+    private final PersonMapper personMapper;
+
+    public PersonController(PersonService personService, PersonMapper personMapper) {
         this.personService = personService;
+        this.personMapper = personMapper;
     }
 
     public final PersonService personService;
@@ -44,15 +49,11 @@ public class PersonController {
 
 
     @PutMapping("/id")
-    public ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody Person personaDetails) {
-        Optional<Person> existingPerson = personService.getPersonById(id);
-        if(existingPerson.isPresent()) {
-            Person personToUpdate = existingPerson.get();
-            personToUpdate.setFirstName(personaDetails.getFirstName());
-            personToUpdate.setLastName(personaDetails.getLastName());
-            personToUpdate.setEmail(personaDetails.getEmail());
-            Person updatedPerson = personService.createPerson(personToUpdate);
-            return ResponseEntity.ok(updatedPerson);
+    public ResponseEntity<PersonDto> updatePerson(@PathVariable Long id, @RequestBody PersonDto dto) {
+        Person entity = personMapper.toEntity(dto);
+        Optional<Person> optionalPerson = personService.updatePerson(id, entity);
+        if(optionalPerson.isPresent()) {
+            return ResponseEntity.ok(personMapper.toDto(optionalPerson.get()));
         }else {
             return ResponseEntity.notFound().build();
         }
