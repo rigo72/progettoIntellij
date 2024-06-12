@@ -5,7 +5,6 @@ import com.jaewa.person.model.Person;
 import com.jaewa.person.repository.PersonRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {PersonRepository.class})

@@ -37,6 +37,7 @@ public class PersonController {
         if(person.isPresent()) {
             return ResponseEntity.ok(person.get());
         }
+
         return ResponseEntity.notFound().build();
     }
 

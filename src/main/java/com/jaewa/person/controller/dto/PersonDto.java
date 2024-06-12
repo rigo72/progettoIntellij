@@ -1,6 +1,5 @@
 package com.jaewa.person.controller.dto;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
